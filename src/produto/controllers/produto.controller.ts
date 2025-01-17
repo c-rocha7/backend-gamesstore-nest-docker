@@ -24,4 +24,10 @@ export class ProdutoController {
   findById(@Param('id', ParseIntPipe) id: number): Promise<Produto> {
     return this.produtoService.findById(id);
   }
+
+  @Get('/titulo/:titulo')
+  @HttpCode(HttpStatus.OK)
+  findByTitulo(@Param('titulo') titulo: string): Promise<Produto[]> {
+    return this.produtoService.findByTitulo(titulo);
+  }
 }
