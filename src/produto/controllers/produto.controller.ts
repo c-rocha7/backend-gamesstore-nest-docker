@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   Get,
   HttpCode,
@@ -6,6 +7,7 @@ import {
   Param,
   ParseFloatPipe,
   ParseIntPipe,
+  Post,
 } from '@nestjs/common';
 import { ProdutoService } from '../services/produto.service';
 import { Produto } from '../entities/produto.entity';
@@ -46,5 +48,11 @@ export class ProdutoController {
     @Param('preco', ParseFloatPipe) preco: number,
   ): Promise<Produto[]> {
     return this.produtoService.findByPrecoLessThanDESC(preco);
+  }
+
+  @Post()
+  @HttpCode(HttpStatus.CREATED)
+  create(@Body() produto: Produto): Promise<Produto> {
+    return this.produtoService.create(produto);
   }
 }
