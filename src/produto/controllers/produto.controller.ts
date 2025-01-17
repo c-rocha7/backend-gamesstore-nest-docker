@@ -8,6 +8,7 @@ import {
   ParseFloatPipe,
   ParseIntPipe,
   Post,
+  Put,
 } from '@nestjs/common';
 import { ProdutoService } from '../services/produto.service';
 import { Produto } from '../entities/produto.entity';
@@ -54,5 +55,11 @@ export class ProdutoController {
   @HttpCode(HttpStatus.CREATED)
   create(@Body() produto: Produto): Promise<Produto> {
     return this.produtoService.create(produto);
+  }
+
+  @Put()
+  @HttpCode(HttpStatus.OK)
+  update(@Body() produto: Produto): Promise<Produto> {
+    return this.produtoService.update(produto);
   }
 }
