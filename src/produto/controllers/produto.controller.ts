@@ -4,6 +4,7 @@ import {
   HttpCode,
   HttpStatus,
   Param,
+  ParseFloatPipe,
   ParseIntPipe,
 } from '@nestjs/common';
 import { ProdutoService } from '../services/produto.service';
@@ -29,5 +30,13 @@ export class ProdutoController {
   @HttpCode(HttpStatus.OK)
   findByTitulo(@Param('titulo') titulo: string): Promise<Produto[]> {
     return this.produtoService.findByTitulo(titulo);
+  }
+
+  @Get('/preco/:preco')
+  @HttpCode(HttpStatus.OK)
+  findByPrecoMoreThanASC(
+    @Param('preco', ParseFloatPipe) preco: number,
+  ): Promise<Produto[]> {
+    return this.produtoService.findByPrecoMoreThanASC(preco);
   }
 }
