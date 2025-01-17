@@ -32,7 +32,7 @@ export class ProdutoController {
     return this.produtoService.findByTitulo(titulo);
   }
 
-  @Get('/preco/:preco')
+  @Get('/preco/maior/:preco')
   @HttpCode(HttpStatus.OK)
   findByPrecoMoreThanASC(
     @Param('preco', ParseFloatPipe) preco: number,
