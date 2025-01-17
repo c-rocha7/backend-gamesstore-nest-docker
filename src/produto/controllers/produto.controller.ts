@@ -39,4 +39,12 @@ export class ProdutoController {
   ): Promise<Produto[]> {
     return this.produtoService.findByPrecoMoreThanASC(preco);
   }
+
+  @Get('/preco/menor/:preco')
+  @HttpCode(HttpStatus.OK)
+  findByPrecoLessThanDESC(
+    @Param('preco', ParseFloatPipe) preco: number,
+  ): Promise<Produto[]> {
+    return this.produtoService.findByPrecoLessThanDESC(preco);
+  }
 }
