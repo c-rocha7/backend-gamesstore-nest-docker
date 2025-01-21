@@ -1,7 +1,7 @@
 import { IsDate, IsEmail, IsNotEmpty, MinLength } from 'class-validator';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Produto } from '../../produto/entities/produto.entity';
-import { Transform, TransformFnParams } from 'class-transformer';
+import { Transform, TransformFnParams, Type } from 'class-transformer';
 
 @Entity({ name: 'tb_usuarios' })
 export class Usuario {
@@ -25,6 +25,7 @@ export class Usuario {
 
   @IsDate()
   @IsNotEmpty()
+  @Type(() => Date)
   @Column({ type: 'date', nullable: false })
   data_nascimento: Date;
 

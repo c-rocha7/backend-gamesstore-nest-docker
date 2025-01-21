@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Usuario } from '../entities/usuario.entity';
 import { Bcrypt } from '../../auth/bcrypt/bcrypt';
+import { DateHelper } from '../../util/DateHelper';
 
 @Injectable()
 export class UsuarioService {
@@ -10,6 +11,7 @@ export class UsuarioService {
     @InjectRepository(Usuario)
     private usuarioRepository: Repository<Usuario>,
     private bcrypt: Bcrypt,
+    private readonly dateHelper: DateHelper,
   ) {}
 
   async findByUsuario(usuario: string): Promise<Usuario | undefined> {
@@ -42,6 +44,12 @@ export class UsuarioService {
 
     if (buscaUsuario)
       throw new HttpException('O Usuario já existe!', HttpStatus.BAD_REQUEST);
+
+    if (!this.dateHelper.isMaiorDeIdade(usuario.data_nascimento))
+      throw new HttpException(
+        'O Usuario precisa ser maior de idade!',
+        HttpStatus.BAD_REQUEST,
+      );
 
     usuario.senha = await this.bcrypt.criptografarSenha(usuario.senha);
     return await this.usuarioRepository.save(usuario);
