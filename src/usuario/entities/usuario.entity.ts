@@ -30,4 +30,9 @@ export class Usuario {
 
   @Column({ length: 5000 })
   foto: string;
+
+  @OneToMany(() => Produto, (produto) => produto.usuario, {
+    onDelete: 'CASCADE',
+  })
+  produto: Produto[];
 }
