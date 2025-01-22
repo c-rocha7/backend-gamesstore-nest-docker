@@ -56,7 +56,7 @@ class Categoria {
   + update() Categoria
   + delete() void
 }
-Produto <.. Categoria
+Produto <|-- Categoria
 ```
 
 ---
