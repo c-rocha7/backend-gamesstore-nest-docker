@@ -66,6 +66,12 @@ export class UsuarioService {
         HttpStatus.BAD_REQUEST,
       );
 
+    if (!this.dateHelper.isMaiorDeIdade(usuario.data_nascimento))
+      throw new HttpException(
+        'O Usuario precisa ser maior de idade!',
+        HttpStatus.BAD_REQUEST,
+      );
+
     usuario.senha = await this.bcrypt.criptografarSenha(usuario.senha);
     return await this.usuarioRepository.save(usuario);
   }

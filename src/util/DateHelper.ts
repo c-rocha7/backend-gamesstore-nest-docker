@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { differenceInYears } from 'date-fns';
 
 @Injectable()
 export class DateHelper {
@@ -6,7 +7,7 @@ export class DateHelper {
     const hoje = new Date();
     const nascimento = new Date(dataNascimento);
 
-    let idade = hoje.getFullYear() - nascimento.getFullYear();
+    let idade = differenceInYears(hoje.getFullYear(), nascimento.getFullYear());
 
     const mesAtual = hoje.getMonth();
     const diaAtual = hoje.getDate();
