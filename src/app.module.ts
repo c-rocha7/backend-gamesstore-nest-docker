@@ -9,11 +9,12 @@ import { ProdutoModule } from './produto/produto.module';
   imports: [
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'mysql',
-      port: 3306,
-      username: 'app_user',
-      password: 'app_password',
-      database: 'db_gamesstore',
+      timezone: '-03:00',
+      host: process.env.DATABASE_HOST || 'db',
+      port: parseInt(process.env.DATABASE_PORT || '3306', 10),
+      username: process.env.DATABASE_USER || 'app_user',
+      password: process.env.DATABASE_PASSWORD || 'app_password',
+      database: process.env.DATABASE_NAME || 'db_app',
       entities: [Categoria, Produto],
       synchronize: true,
     }),

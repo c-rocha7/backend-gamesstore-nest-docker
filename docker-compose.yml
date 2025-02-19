@@ -1,33 +1,50 @@
 services:
+  db:
+    image: mysql:8.0
+    container_name: mysql_gamesstore
+    ports:
+      - "${PORT_EXPORT_MYSQL:-3306}:${PORT_DEFAULT_MYSQL:-3306}"
+    environment:
+      - MYSQL_DATABASE=${DATABASE_NAME:-db_app}
+      - MYSQL_USER=${DATABASE_USER:-app_user}
+      - MYSQL_PASSWORD=${DATABASE_PASSWORD:-app_password}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-root_password}
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - network-gamesstore
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD:-root_password}" ]
+      interval: 5s
+      timeout: 10s
+      retries: 5
+
   backend:
     build:
       context: .
       dockerfile: Dockerfile
+    container_name: backend_gamesstore
     ports:
       - "4000:3000"
     volumes:
       - .:/usr/src/app
       - ./node_modules:/usr/src/app/node_modules
     environment:
-      - DATABASE_HOST=mysql
-      - DATABASE_PORT=3306
-      - DATABASE_USER=app_user
-      - DATABASE_PASSWORD=app_password
-      - DATABASE_NAME=db_gamesstore
+      - DATABASE_HOST=${DATABASE_HOST:-db}
+      - DATABASE_PORT=${DATABASE_PORT:-3306}
+      - DATABASE_USER=${DATABASE_USER:-app_user}
+      - DATABASE_PASSWORD=${DATABASE_PASSWORD:-app_password}
+      - DATABASE_NAME=${DATABASE_NAME:-db_app}
     depends_on:
-      - mysql
+      db:
+        condition: service_healthy
+    networks:
+      - network-gamesstore
 
-  mysql:
-    image: mysql:8.0
-    ports:
-      - "3307:3306"
-    environment:
-      - MYSQL_ROOT_PASSWORD=root_password
-      - MYSQL_DATABASE=db_gamesstore
-      - MYSQL_USER=app_user
-      - MYSQL_PASSWORD=app_password
-    volumes:
-      - mysql_data:/var/lib/mysql
+networks:
+  network-gamesstore:
+    name: network-gamesstore
+    driver: bridge
 
 volumes:
   mysql_data:
